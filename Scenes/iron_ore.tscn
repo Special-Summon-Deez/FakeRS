@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://31q5ty8ff5f6"]
+
+[ext_resource type="Script" path="res://iron_ore.gd" id="1_56wgb"]
+[ext_resource type="Texture2D" uid="uid://bon5a1n2bhs4t" path="res://Art/Iron_rock.png" id="1_ngemf"]
+[ext_resource type="Resource" uid="uid://cl664wun5wyqh" path="res://Resources/Items/Iron_ore.tres" id="2_5erd0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mve0u"]
+atlas = ExtResource("1_ngemf")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j772n"]
+atlas = ExtResource("1_ngemf")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_aft3a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mve0u")
+}],
+"loop": false,
+"name": &"EmptyOre",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j772n")
+}],
+"loop": false,
+"name": &"IronOre",
+"speed": 0.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_0qo1b"]
+radius = 12.0
+
+[node name="IronOre" type="Node2D"]
+script = ExtResource("1_56wgb")
+item = ExtResource("2_5erd0")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 3
+sprite_frames = SubResource("SpriteFrames_aft3a")
+animation = &"IronOre"
+
+[node name="MinableArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="MinableArea"]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_0qo1b")
+
+[node name="Spawn" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[node name="Marker2D" type="Marker2D" parent="."]
+position = Vector2(0, -3)
+
+[connection signal="body_entered" from="MinableArea" to="." method="_on_minable_area_body_entered"]
+[connection signal="body_exited" from="MinableArea" to="." method="_on_minable_area_body_exited"]
+[connection signal="timeout" from="Spawn" to="." method="_on_spawn_timeout"]

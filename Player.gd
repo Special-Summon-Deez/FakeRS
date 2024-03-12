@@ -4,7 +4,7 @@ extends CharacterBody2D
 const SPEED = 100.0
 var direction : Vector2 = Vector2.ZERO
 
-
+@export var inv:Inv
 @onready var animation_tree : AnimationTree = $AnimationTree
 
 func _ready():
@@ -12,7 +12,6 @@ func _ready():
 
 func _process(delta):
 	update_animation_tree()
-	print(direction)
 
 func _physics_process(delta):
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -36,3 +35,5 @@ func update_animation_tree():
 		animation_tree["parameters/Idle/blend_position"] = direction
 		animation_tree["parameters/Walking/blend_position"] = direction
 		
+func collect(item):
+	inv.Insert(item)
